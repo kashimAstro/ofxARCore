@@ -25,7 +25,14 @@ import com.google.ar.core.Frame;
 import com.google.ar.core.Pose;
 import com.google.ar.core.Session;
 import com.google.ar.core.TrackingState;
+import com.google.ar.core.Plane;
+import com.google.ar.core.Point;
+import com.google.ar.core.PointCloud;
+import com.google.ar.core.exceptions.CameraNotAvailableException;
 import com.google.ar.core.exceptions.NotTrackingException;
+import com.google.ar.core.exceptions.UnavailableApkTooOldException;
+import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
+import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 
 import cc.openframeworks.OFAndroid;
 import cc.openframeworks.OFAndroidObject;
@@ -57,6 +64,16 @@ public class ofxARCoreLib extends OFAndroidObject {
 	private Pose mPose;
 	private ArrayList<Anchor> mAnchors = new ArrayList<>();
 
+	private PointCloud mLastPointCloud = null;
+
+
+	//        mNumPoints = mLastPointCloud.getPoints().remaining() / FLOATS_PER_POINT;
+	//	  mLastPointCloud = cloud;
+	//        mLastPointCloud.getPoints()
+	//	  mPointCloud.update(frame.getPointCloud());
+	//        mPointCloud.draw(frame.getPointCloudPose(), viewmtx, projmtx);
+
+
 	public void setup(int texId, final int width, final int height){
 		Context context = OFAndroid.getContext();
 
@@ -67,7 +84,15 @@ public class ofxARCoreLib extends OFAndroidObject {
 			public void run() {
 				Context context = OFAndroid.getContext();
 
-				mSession = new Session((Activity) context);
+				try {
+					mSession = new Session((Activity) context);
+				} catch (UnavailableArcoreNotInstalledException e) {
+					e.printStackTrace();
+				} catch (UnavailableApkTooOldException e) {
+					e.printStackTrace();
+				} catch (UnavailableSdkTooOldException e) {
+					e.printStackTrace();
+				}
 
 				// Create default config, check is supported, create session from that config.
 				mDefaultConfig =  new Config(mSession);
@@ -91,7 +116,11 @@ public class ofxARCoreLib extends OFAndroidObject {
 				bbTexCoordsTransformed.order(ByteOrder.nativeOrder());
 				mTextureUVTransformed = bbTexCoordsTransformed.asFloatBuffer();
 
-				mSession.resume();
+				try {
+					mSession.resume();
+				} catch (CameraNotAvailableException e) {
+					e.printStackTrace();
+				}
 
 			}
 		});
@@ -109,7 +138,7 @@ public class ofxARCoreLib extends OFAndroidObject {
 		return mViewMatrix;
 	}
 
-	public float[] getProjectionMatrix(float near, float far){
+	public float[] getProjectionMatrix(float near, float far) throws CameraNotAvailableException {
 		if(mIsReady) mSession.update().getCamera().getProjectionMatrix(mProjectionMatrix, 0, near, far);
 		return mProjectionMatrix;
 	}
@@ -195,7 +224,11 @@ public class ofxARCoreLib extends OFAndroidObject {
 	@Override
 	protected void appResume() {
 		if(mSession != null)
-			mSession.resume();
+			try {
+				mSession.resume();
+			} catch (CameraNotAvailableException e) {
+				e.printStackTrace();
+			}
 	}
 
 	@Override
