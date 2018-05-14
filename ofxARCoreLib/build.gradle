@@ -37,6 +37,6 @@ model {
 
 
 dependencies {
-    compile 'com.google.ar:core:1+'
+    compile 'com.google.ar:core:1.2.0'
     compile project(path: ':ofAndroidLib')
 }

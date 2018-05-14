@@ -240,5 +240,179 @@ ofMatrix4x4 ofxARCore::getAnchor(int i){
     return m;
 }
 
+/* point cloud and plane */
+std::vector<float> ofxARCore::getPointCloud() {
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,
+                                                           env->GetMethodID(javaClass,"getPointCloud","()[F"));
 
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result;
+    result.resize((int)size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    return result;
+}
+
+ofMatrix4x4 ofxARCore::getPlaneMatrix() {
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,
+                                                           env->GetMethodID(javaClass,"getPlaneMatrix","()[F"));
+    jboolean isCopy;
+    jfloat *body =  env->GetFloatArrayElements(data, &isCopy);
+    ofMatrix4x4 m;
+    m.set(body);
+    return m;
+}
+
+std::vector< std::vector<float> > ofxARCore::getPlaneShape() {
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,env->GetMethodID(javaClass,"getPlaneShape","()[[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector< std::vector<float> > result;
+    result.resize(size, std::vector<float>(size));
+    //env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    //std::vector< std::vector<float> > result;
+    return result;
+}
+
+
+/* horizontal plane */
+std::vector<float> ofxARCore::getPlaneHorizontalSizeX()
+{
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,env->GetMethodID(javaClass,"getPlaneHorizontalSizeX","()[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result(size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    return result;
+}
+
+std::vector<float> ofxARCore::getPlaneHorizontalSizeZ()
+{
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,env->GetMethodID(javaClass,"getPlaneHorizontalSizeZ","()[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result(size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    return result;
+}
+
+std::vector<float> ofxARCore::getPlaneHorizontalX()
+{
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,env->GetMethodID(javaClass,"getPlaneHorizontalX","()[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result(size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    return result;
+}
+
+std::vector<float> ofxARCore::getPlaneHorizontalY()
+{
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,env->GetMethodID(javaClass,"getPlaneHorizontalY","()[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result(size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    return result;
+}
+
+std::vector<float> ofxARCore::getPlaneHorizontalZ()
+{
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,env->GetMethodID(javaClass,"getPlaneHorizontalZ","()[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result(size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    return result;
+}
+
+/* vertical plane */
+std::vector<float> ofxARCore::getPlaneVerticalSizeX()
+{
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,env->GetMethodID(javaClass,"getPlaneVerticalSizeX","()[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result(size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    return result;
+}
+
+std::vector<float> ofxARCore::getPlaneVerticalSizeZ()
+{
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,env->GetMethodID(javaClass,"getPlaneVerticalSizeZ","()[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result(size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    return result;
+}
+
+std::vector<float> ofxARCore::getPlaneVerticalX()
+{
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,env->GetMethodID(javaClass,"getPlaneVerticalX","()[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result(size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    return result;
+}
+
+std::vector<float> ofxARCore::getPlaneVerticalY()
+{
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,env->GetMethodID(javaClass,"getPlaneVerticalY","()[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result(size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    return result;
+}
+
+std::vector<float> ofxARCore::getPlaneVerticalZ()
+{
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,env->GetMethodID(javaClass,"getPlaneVerticalZ","()[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result(size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    return result;
+}
+
+ofMatrix4x4 ofxARCore::getAnchorPlanePoseMatrix()
+{
+    //JNIEnv *env = ofGetJNIEnv();
+    //jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,
+    //                                                       env->GetMethodID(javaClass,"getAnchorPlanePoseMatrix","()[F"));
+    //jboolean isCopy;
+    //jfloat *body =  env->GetFloatArrayElements(data, &isCopy);
+    ofMatrix4x4 m;
+    //m.set(body);
+    return m;
+}
+
+ofFloatColor ofxARCore::getColorCorrection(){
+    JNIEnv *env = ofGetJNIEnv();
+    jfloatArray data = (jfloatArray) env->CallObjectMethod(javaTango,
+                                                           env->GetMethodID(javaClass,"getColorCorrectionRGBA","()[F"));
+
+    jsize size = env->GetArrayLength(data);
+    std::vector<float> result(size);
+    env->GetFloatArrayRegion(data, 0, size, (jfloat*)&result[0]);
+    ofFloatColor c;
+    if(result.size() > 0)
+        c = ofFloatColor(result[0],result[1],result[2],result[3]);
+    return c;
+}
+/* point cloud and plane */
 #endif

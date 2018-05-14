@@ -19,6 +19,7 @@
 #include "ofLog.h"
 #include "ofMesh.h"
 #include "ofEventUtils.h"
+#include <vector>
 #ifdef TARGET_ANDROID
 
 #include <jni.h>
@@ -29,14 +30,13 @@
 
 class ofxARCore : ofThread{
 public:
-
-	ofxARCore();
+    ofxARCore();
     ~ofxARCore();
 
     void setup();
 
     bool isInitialized();
-	bool isTracking();
+    bool isTracking();
 
     void update();
     void draw();
@@ -46,11 +46,30 @@ public:
 
     void addAnchor();
     ofMatrix4x4 getAnchor(int i=0);
-
     ofMatrix4x4 getViewMatrix();
     ofMatrix4x4 getProjectionMatrix(float near=0.1f, float far=100.0f);
-
     ofTexture texture;
+
+    /* new method arcore @kashimAstro */
+    std::vector<float> getPointCloud();     /* get point cloud arcore */
+    ofFloatColor getColorCorrection();      /* get color correction arcore */
+
+    ofMatrix4x4 getPlaneMatrix();           /* get plane matrix (incomplete) */
+    ofMatrix4x4 getAnchorPlanePoseMatrix(); /* get anchor plane (incomplete) */
+    std::vector< std::vector<float> > getPlaneShape();     /* get plane shape (incomplete) */
+
+    std::vector<float> getPlaneVerticalSizeX();     /* get size plane x */
+    std::vector<float> getPlaneVerticalSizeZ();     /* get size plane y */
+    std::vector<float> getPlaneVerticalX();         /* get vector plane X */
+    std::vector<float> getPlaneVerticalY();         /* get vector plane Y */
+    std::vector<float> getPlaneVerticalZ();         /* get vector plane Z */
+
+    std::vector<float> getPlaneHorizontalSizeX();     /* get size plane x */
+    std::vector<float> getPlaneHorizontalSizeZ();     /* get size plane y */
+    std::vector<float> getPlaneHorizontalX();         /* get vector plane X */
+    std::vector<float> getPlaneHorizontalY();         /* get vector plane Y */
+    std::vector<float> getPlaneHorizontalZ();         /* get vector plane Z */
+    /* new method arcore @kashimAstro */
 
 private:
     void setupSession();
